@@ -96,7 +96,7 @@ to `scripts/test.sh`. Where `<drop_frames>` is the number of frames or timesteps
 To demonstrate the capability of our spatial attention mechanism to predict safe, <em> socially-acceptable </em> trajectories, we evaluate the ability of trajectories predicted by our model to avoid <em> collisions </em>. For a given prediction time window of 12 timesteps and a certain distance threshold, we say the situation contains a collision if the distance between any two pedestrians in the frame drops below the distance threshold at any of the 12 timesteps. To evaluate <em> SCAN </em> and <em> vanillaSCAN </em> for socially acceptable trajectories and ability to avoid collisions, run:
 
 ```bash
-sh scripts/plot_collisions.sh 
+sh scripts/collisions.sh <dataset_name> 
 ```
 
 
