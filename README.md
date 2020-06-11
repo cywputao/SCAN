@@ -63,16 +63,40 @@ sh scripts/train.sh <model_name> <dataset_name> 16 32 128 16
 
 where: `<model_name>` can be `spatial_temporal_model` or `spatial_model`. `spatial_temporal_model` is our final model, <em> SCAN </em>, and `<spatial_model>` is our ablation, <em> vanillaSCAN </em>. `<dataset_name>` choices are `zara1`, `zara2`, `univ`, `eth`, `hotel`. 
 
-To evaluate our models, run:
+To evaluate <em> SCAN </em> on the five datasets, run:
 
 ```bash
-sh scripts/test.sh <model_name> <dataset_name> 16 32 128 16
+sh scripts/test.sh <dataset_name> 
 ```
+To evaluate <em> vanillaSCAN </em> change `spatial_temporal_model` to `spatial_model` in `scripts/test.sh`. 
 
-We evaluate our model using 2 metrics: ADE (Average Displacement Error) and FDE (Final Displacement Error). 
+We evaluate our models using 2 metrics: ADE (Average Displacement Error) and FDE (Final Displacement Error). 
 
 |             	| ETH         	| HOTEL      	| ZARA1       	| ZARA2       	| UNIV        	| AVG         	|
 |-------------	|-------------	|------------	|-------------	|-------------	|-------------	|-------------	|
 | vanillaSCAN 	| 0.75 / 1.44 	| 0.45/ 0.91 	| 0.39 / 0.89 	| 0.34 / 0.75 	| 0.62 / 1.31 	| 0.51 / 1.06 	|
 | SCAN        	| 0.55/0.78   	| 0.47 /0.90 	| 0.22/0.45   	| 0.31/0.67   	| 0.62 /1.28  	| 0.43/0.82   	|
+
+## Qualitative Analysis
+
+### Track Fragmentation Analysis
+
+Noisy or missing data is a common problem in object tracking. It is important for an intent prediction model to be able to predict fairly accurate future trajectories despite interrupted observed ground truth trajectories. We evaluated the robustness of <em> SCAN </em> to such track fragmentation by randomly dropping frames from the observation window for each pedestrian. 
+
+To evaluate track fragmentation add 
+
+```bash
+--drop_frames=<drop_frames> 
+```
+
+to `scripts/test.sh`. Where `<drop_frames>` is the number of frames or timesteps from the observed sequence that are to be dropped per pedestrian in the scene. 
+
+### Collision Analysis
+
+To demonstrate the capability of our spatial attention mechanism to predict safe, <em> socially-acceptable </em> trajectories, we evaluate the ability of trajectories predicted by our model to avoid <em> collisions </em>. For a given prediction time window of 12 timesteps and a certain distance threshold, we say the situation contains a collision if the distance between any two pedestrians in the frame drops below the distance threshold at any of the 12 timesteps. To evaluate <em> SCAN </em> and <em> vanillaSCAN </em> for socially acceptable trajectories and ability to avoid collisions, run:
+
+```bash
+sh scripts/plot_collisions.sh 
+```
+
 
