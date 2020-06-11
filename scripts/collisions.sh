@@ -1,9 +1,8 @@
 python -u main.py \
 --plot_collisions \
---data "$2" \
---enc_dim "$3" \
---dec_dim "$4" \
---att_dim "$5" \
---model "$1" \
---param_domain 2 \
---embedding_dim "$6" \
+--data "$1" \
+--enc_dim 16 \
+--dec_dim 32 \
+--att_dim 128 \
+--model spatial_temporal_model \
+--embedding_dim 16 \
